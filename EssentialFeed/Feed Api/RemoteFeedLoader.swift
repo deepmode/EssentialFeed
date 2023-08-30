@@ -32,9 +32,10 @@ public final class RemoteFeedLoader {
     }
     
     public func load(completion: @escaping (Error) -> Void) {
-        
+        print("\n\(type(of:self)): \(#function))")
         client.get(from: url) { result in
             //domain specific error
+            print("\(type(of:self)): \(#function)) result")
             switch result {
             case .success(_):
                 completion(.invalidData)

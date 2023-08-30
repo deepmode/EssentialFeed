@@ -65,7 +65,10 @@ final class RemoteFeedLoaderTests: XCTestCase {
         samples.enumerated().forEach { index, code in
             //Act: When we tell the sut to load and we complete the client's HTTP request with an error.
             var capturedErrors = [RemoteFeedLoader.Error]()
-            sut.load { capturedErrors.append($0) }
+            sut.load {
+                print("\(type(of:self)): \(#function)): sut.load")
+                capturedErrors.append($0)
+            }
             client.complete(withStatusCode: code, at: index)
             
             //Assert: Then we expect the captured load error to be connectivity
@@ -91,14 +94,17 @@ final class RemoteFeedLoaderTests: XCTestCase {
         var messages = [(url:URL, completion:(HTTPClientResult) -> Void)]()
         
         func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+            print("\(type(of:self)): \(#function))")
             messages.append((url, completion))
         }
         
         func complete(with error: Error, at index:Int = 0) {
+            print("\(type(of:self)): \(#function))")
             messages[index].completion(.failure(error))
         }
         
         func complete(withStatusCode code:Int, at index:Int = 0) {
+            print("\(type(of:self)): \(#function))")
             let response = HTTPURLResponse(
                 url: requestedURLs[index],
                 statusCode: code,
