@@ -42,8 +42,12 @@ public final class RemoteFeedLoader {
             //domain specific error
             print("\(type(of:self)): \(#function)) result")
             switch result {
-            case .success(_,_):
-                completion(.failure(.invalidData))
+            case .success(let data, _ ):
+                if let json = try? JSONSerialization.jsonObject(with: data) {
+                    completion(.success([]))
+                } else {
+                    completion(.failure(.invalidData))
+                }       
             case .failure(_):
                 completion(.failure(.connectivity))
             }
