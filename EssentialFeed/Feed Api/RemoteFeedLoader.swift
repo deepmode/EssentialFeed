@@ -43,11 +43,11 @@ public final class RemoteFeedLoader {
             print("\(type(of:self)): \(#function)) result")
             switch result {
             case .success(let data, _ ):
-                if let json = try? JSONSerialization.jsonObject(with: data) {
+                if let _ = try? JSONSerialization.jsonObject(with: data) {
                     completion(.success([]))
                 } else {
                     completion(.failure(.invalidData))
-                }       
+                }
             case .failure(_):
                 completion(.failure(.connectivity))
             }
