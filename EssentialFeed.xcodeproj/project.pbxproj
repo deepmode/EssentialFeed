@@ -16,6 +16,7 @@
 		6B49C3032A9B0F79004167B3 /* RemoteFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B49C3022A9B0F79004167B3 /* RemoteFeedLoaderTests.swift */; };
 		6BBB712D2A9C131A00E34F43 /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBB712C2A9C131A00E34F43 /* RemoteFeedLoader.swift */; };
 		6BFC892C2AA315BD000F4FEC /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFC892B2AA315BD000F4FEC /* HTTPClient.swift */; };
+		6BFC892E2AA3173B000F4FEC /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFC892D2AA3173B000F4FEC /* FeedItemsMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		6B49C3022A9B0F79004167B3 /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
 		6BBB712C2A9C131A00E34F43 /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		6BFC892B2AA315BD000F4FEC /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		6BFC892D2AA3173B000F4FEC /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				6BBB712C2A9C131A00E34F43 /* RemoteFeedLoader.swift */,
+				6BFC892D2AA3173B000F4FEC /* FeedItemsMapper.swift */,
 				6BFC892B2AA315BD000F4FEC /* HTTPClient.swift */,
 			);
 			path = "Feed Api";
@@ -228,6 +231,7 @@
 				6BBB712D2A9C131A00E34F43 /* RemoteFeedLoader.swift in Sources */,
 				6BFC892C2AA315BD000F4FEC /* HTTPClient.swift in Sources */,
 				6B44D7C72A9AD7280027FA61 /* FeedLoader.swift in Sources */,
+				6BFC892E2AA3173B000F4FEC /* FeedItemsMapper.swift in Sources */,
 				6B44D7C42A9AD5E30027FA61 /* FeedItem.swift in Sources */,
 				6B44D7AE2A9AD58F0027FA61 /* EssentialFeed.docc in Sources */,
 			);
