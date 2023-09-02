@@ -58,10 +58,12 @@ public final class RemoteFeedLoader {
 
 private class FeedItemsMapper {
     
+    //DTO
     private struct Root: Decodable {
         let items:[Item]
     }
 
+    //DTO
     private struct Item: Decodable {
         let id:UUID
         let description:String?
@@ -77,7 +79,8 @@ private class FeedItemsMapper {
     
     static func map(_ data: Data, _ response:HTTPURLResponse) throws -> [FeedItem] {
         guard response.statusCode == OK_200 else { throw RemoteFeedLoader.Error.invalidData }
-
+        
+        //DTO (Data Transfer Object) -> App Models e.g. Root -> [FeedItem]
         let root = try JSONDecoder().decode(Root.self, from: data)
         return root.items.map { $0.item }
     }
