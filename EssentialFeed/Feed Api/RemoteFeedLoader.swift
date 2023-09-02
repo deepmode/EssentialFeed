@@ -29,9 +29,13 @@ public final class RemoteFeedLoader {
     
     public func load(completion: @escaping (Result) -> Void) {
         print("\n\(type(of:self)): \(#function))")
-        client.get(from: url) { result in
-            //domain specific error
-            //print("\(type(of:self)): \(#function)) result")
+        
+        client.get(from: url) { [weak self] result in
+            
+            guard self != nil else { return }
+        
+            print("\(type(of:self)): \(#function)) result")
+            
             switch result {
             case .success(let data, let response):
                 completion(FeedItemsMapper.map(data, from: response))
@@ -41,5 +45,3 @@ public final class RemoteFeedLoader {
         }
     }
 }
-
-
