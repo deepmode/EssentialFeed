@@ -12,6 +12,10 @@ internal final class FeedItemsMapper {
     //DTO
     private struct Root: Decodable {
         let items:[Item]
+        
+        var feed:[FeedItem] {
+            return items.map { $0.item }
+        }
     }
 
     //DTO
@@ -28,11 +32,15 @@ internal final class FeedItemsMapper {
     
     private static var OK_200: Int { return 200}
     
-    internal static func map(_ data: Data, _ response:HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == OK_200 else { throw RemoteFeedLoader.Error.invalidData }
+    internal static func map(_ data: Data, from response:HTTPURLResponse) -> RemoteFeedLoader.Result {
+        
+        guard response.statusCode == OK_200,
+            let root = try? JSONDecoder().decode(Root.self, from: data) else  {
+            return  .failure(.invalidData)
+        }
         
         //DTO (Data Transfer Object) -> App Models e.g. Root -> [FeedItem]
-        let root = try JSONDecoder().decode(Root.self, from: data)
-        return root.items.map { $0.item }
+        return .success(root.feed)
+        
     }
 }
