@@ -9,10 +9,18 @@ import XCTest
 import Foundation
 import EssentialFeed
 
-class URLSessionHTTPClient {
-    private let session:URLSession
+protocol HTTPSession {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSsessionTask
+}
 
-    init(session:URLSession) {
+protocol HTTPSsessionTask {
+    func resume()
+}
+
+class URLSessionHTTPClient {
+    private let session:HTTPSession
+
+    init(session:HTTPSession) {
         self.session = session
     }
     
@@ -65,20 +73,20 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     //MARKS: - Helpers
     
-    private class URLSessionSpy: URLSession {
+    private class URLSessionSpy: HTTPSession {
         
         private var stubs = [URL:Stub]()
         
         private struct Stub {
-            let task:URLSessionDataTask
+            let task:HTTPSsessionTask
             let error:Error?
         }
         
-        func stubs(url:URL, task:URLSessionDataTask = FakeURLSessionDataTask(), error:Error? = nil) {
+        func stubs(url:URL, task:HTTPSsessionTask = FakeURLSessionDataTask(), error:Error? = nil) {
             stubs[url] = Stub(task: task, error: error)
         }
         
-        override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSsessionTask {
             
             guard let stub = stubs[url] else {
                 fatalError("Couldn't find stub for \(url)")
@@ -90,15 +98,15 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private class FakeURLSessionDataTask: URLSessionDataTask {
-        override func resume() {
+    private class FakeURLSessionDataTask: HTTPSsessionTask {
+        func resume() {
         }
     }
     
-    private class URLSessionDataTaskSpy: URLSessionDataTask {
+    private class URLSessionDataTaskSpy: HTTPSsessionTask {
         var resumeCallCount = 0
         
-        override func resume() {
+        func resume() {
             resumeCallCount += 1
         }
     }
