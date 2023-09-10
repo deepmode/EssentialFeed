@@ -22,6 +22,8 @@ class URLSessionHTTPClient {
         session.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(error))
+            } else if let data = data, data.count > 0,  let response = response as? HTTPURLResponse {
+                completion(.success(data, response))
             } else {
                 completion(.failure(UnexpectedValuesRepresentation()))
             }
@@ -31,15 +33,16 @@ class URLSessionHTTPClient {
 
 final class URLSessionHTTPClientTests: XCTestCase {
     
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         URLProtocolStub.startInterceptingRequet()
     }
     
-    override class func tearDown() {
+    override func tearDown() {
         super.tearDown()
         URLProtocolStub.stopInterceptingRequet()
     }
+    
     
     func test_getFromURL_performGETRequestWithURL() {
         let url = anyURL()
@@ -78,6 +81,27 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultForError(data: anyData(), response: nonHTTPURLResponse(), error: nil))
     }
     
+    func test_getFromURL_suceedsOnHTTPURLResponseWithData() {
+        let data = anyData()
+        let response = anyHTTPURLResponse()
+
+        URLProtocolStub.stub(data: data, response: response, error: nil)
+
+        let exp = expectation(description: "Wait for completion")
+        makeSUT().get(from: anyURL()) { result in
+            switch result {
+            case .success(let receivedData, let receivedResponse):
+                XCTAssertEqual(receivedData, data)
+                XCTAssertEqual(receivedResponse.url, response.url)
+                XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+            default:
+                XCTFail("Expected success, get \(result) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARKS: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
@@ -107,7 +131,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         return receievedError
     }
-    
     
     
     private func anyURL() -> URL {
